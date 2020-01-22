@@ -8,7 +8,7 @@ Run the following in your R session to get the notes and materials for the works
 ```
 install.packages('usethis')
 
-usethis::use_course('https://github.com/m-clark/SC2-Workshop/blob/master/workshop_data_processing.zip?raw=true', destdir = NULL)
+usethis::use_course('https://github.com/m-clark/R-I-Basics/blob/master/workshop_data_processing.zip?raw=true', destdir = NULL)
 ```
 
 If you have issues, just download that zip file (click or paste into your browser), unzip it to a location of your choosing, then:

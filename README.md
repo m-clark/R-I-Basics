@@ -1,6 +1,6 @@
 R-I-Basics
 
-This is the repo for the workshop that focuses on Part I of soon-to-be-renamed [Data Processing and Visualization](https://m-clark.github.io/data-processing-and-visualization)
+This is the repo for the workshop that focuses on Part I of (the soon-to-be-renamed) [Data Processing and Visualization](https://m-clark.github.io/data-processing-and-visualization)
 
 
 Run the following in your R session to get the notes and materials for the workshop.  Change the `destdir` to save the project in a specific place (not necessary, should default to desktop).  It will open the RStudio project for you.
@@ -19,4 +19,7 @@ OR
 
 - With RStudio - File/Open Project - Navigate to the folder - Open
 
-Afterwards you may open `code/install_script_visualization.R` and run it.
+
+
+
+With your RStudio project set up, you may read the `ReadMe.md`, open `code/install_script_data_processing.R` and run it.

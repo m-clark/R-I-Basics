@@ -1,0 +1,477 @@
+---
+title: "R I: Basics <br><br>"
+subtitle: "Data Wrangling"
+author: "Michael Clark"
+institute: "CSCAR, UM"
+date: "2020-09-24"
+css: style.css
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+background-image: url(https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(
+  # code
+  echo      = T,
+  eval      = F,
+  message   = F,
+  warning   = F,
+  error     = F,
+  comment   = NA,
+  R.options = list(width = 220),
+  # viz
+  dev.args  = list(bg = 'transparent'),
+  dev       = 'svglite',
+  fig.align = 'center',
+  out.width = '75%',
+  fig.asp   = .75,
+  # cache
+  cache.rebuild = F,
+  cache         = F
+)
+
+kable_df = function(data, digits=3, ...) {
+  kableExtra::kable(
+    data,
+    digits = digits,
+    format = 'html',
+    booktabs = T,
+    # longtable = F,
+    linesep = "",
+    ...,
+  ) %>% 
+    kableExtra::kable_styling(full_width = F)
+}
+
+perc = function(x, digits = 1) paste(rnd(x*100, digits = digits), '%')
+```
+
+
+
+
+---
+class: inverse, center, middle
+
+# Data Structures
+
+<i class="fas fa-database fa-5x"   aria-hidden="true"></i><span class="" style = "margin-right: 25px"></span>
+<i class="fas fa-code fa-5x" style = 'color:#1f65b7'></i>
+
+---
+class: inverse
+
+# Data Structures
+
+- Vectors
+- Matrices
+- Lists
+- Data Frames
+
+---
+class: inverse
+
+# Data Structures: Vectors
+
+- *Character strings *
+
+```{r}
+string = c('a', 'q')
+```
+
+- *Factors*
+
+```{r}
+factor(string)
+```
+
+How are they different?
+
+---
+class: inverse
+
+# Data Structures: Vectors
+
+- Logicals
+
+```{r}
+my_logic = c(TRUE, FALSE, TRUE)
+```
+
+
+- Numeric and integers
+
+```{r}
+x = c(1, 2.5, 3)
+```
+
+---
+class: inverse
+
+# Data Structures: Matrices & Data Frames
+
+- *Matrices*: still must be all the same type!
+
+```{r}
+x = 1:4
+y = 5:8
+z = 9:12
+
+cbind(x, y, z)   # column bind
+```
+
+- *Data Frame*: Mix it up!
+
+```{r}
+my_df = data.frame(x = 1:2, y = c('a', 'b'))
+```
+
+
+---
+class: inverse
+
+# Data Structures: Lists
+
+Data frames are flexible because they are lists
+
+```{r}
+list(1, '1', my_df)
+```
+
+Most R objects you deal with are lists!
+
+- Data frames, model objects, plots, etc.
+
+
+---
+class: inverse
+
+# Data Structure Exercises
+
+- Exercise 1
+
+  - Create an object that is a matrix and/or a data.frame, and inspect its class or structure (use the class or str functions on the object you just created).
+
+- Exercise 2
+
+  - Create a list of 3 elements, the first of which contains character strings, the second numbers, and the third, the data.frame or matrix you just created in Exercise 1.
+
+- Thinking Exercises
+
+  - How is a factor different from a character vector?
+  - How is a data.frame the same as and different from a matrix?
+  - How is a data.frame the same as and different from a list?
+
+
+
+---
+class: inverse, center, middle
+
+# Input/Output
+
+<i class="fas fa-file-import fa-5x" ></i>
+<span class="" style = "margin-right: 25px"></span>
+<i class="fas fa-file-export fa-5x" ></i>
+
+
+---
+class: inverse
+
+# Input/Output
+
+Primary packages:
+
+- readr
+  - write_csv, read_csv
+- haven
+  - other statistical packages (e.g. Stata)
+- base R
+  - save, save.image, load
+  - readRDS, saveRDS
+
+```{r}
+my_data = readr::read_csv('some_file.csv')
+
+load('my_saved_R_objects.RData')
+```
+
+---
+class: inverse
+
+# Input/Output Exercises
+
+Read this csv (or any in your project folder):
+
+https://raw.githubusercontent.com/m-clark/data-processing-and-visualization/master/data/cars.csv
+
+
+---
+class: inverse, center, middle
+
+# Indexing
+
+![](img/original-dfs.svg)
+
+---
+class: inverse
+
+# Indexing: Slicing
+
+How do I extract:
+- elements
+- columns/rows
+- subsets
+- ...?
+
+```{r}
+letters[4:6]        # lower case letters a-z
+
+myMatrix[1, 2:3]    # matrix[rows, columns]
+
+mydf['row1', 'b']   # data frame by name
+
+mydf[mydf$a >= 2, ] # boolean
+```
+
+
+---
+class: inverse
+
+# Indexing: List extraction
+
+*[* : grab a slice of elements/columns
+
+*[[* : grab specific elements/columns
+
+*$* : grab specific elements/columns
+
+*@*: extract slot for S4 objects
+
+
+```{r}
+my_list_or_df[2:4]
+
+my_list_or_df[['name']]
+
+my_list_or_df$name
+```
+
+
+
+
+---
+class: inverse
+
+# Indexing: Exercises
+
+
+.pull-left[
+
+Here is a matrix, a data.frame and a list.
+
+
+```{r }
+mymatrix = matrix(
+  rnorm(100), 
+  nrows = 10, 
+  ncols = 10
+)
+
+mydf = mtcars
+
+mylist = list(
+  mat = mymatrix, 
+  thisdf = mydf
+)
+```
+
+]
+
+.pull-right[
+- Exercise 1
+    - For the matrix, in separate operations, take a slice of rows, a selection of columns, and a single element.
+- Exercise 2
+    - For the data.frame, grab a column in 3 different ways.
+- Exercise 3
+    - For the list, grab an element by number and by name.
+]
+
+
+
+---
+class: tidyverse
+background-image: url(img/tidyverse.png)
+
+
+<!-- # Tidyverse -->
+
+<!-- <img src="img/tidyverse.png" style="display:block; margin: 0 auto;"> -->
+
+---
+class: inverse
+
+# Tidyverse
+
+What is the *tidyverse*?
+
+```{r eval=TRUE, message=TRUE, warning=TRUE, echo=-2}
+library(tidyverse)
+tidyverse::tidyverse_logo()
+```
+
+```
+── Attaching packages ────────────── tidyverse 1.3.0 ──
+✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+✓ tibble  3.0.3     ✓ dplyr   1.0.2
+✓ tidyr   1.1.2     ✓ stringr 1.4.0
+✓ readr   1.3.1     ✓ forcats 0.5.0
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Packages
+
+- <span class="pack" style = "">ggplot2</span>: data visualization
+- <span class="pack" style = "">tibble</span>: a re-imagining of data frames
+- <span class="pack" style = "">tidyr</span>: data tidying
+- <span class="pack" style = "">readr</span>: data import
+- <span class="pack" style = "">purrr</span>: functional programming
+- <span class="pack" style = "">dplyr</span>: data manipulation
+- <span class="pack" style = "">stringr</span>: string processing
+- <span class="pack" style = "">forcats</span>: easier factors
+
+
+---
+class: inverse
+
+# Tidyverse
+
+What is *tidy data*?
+
+- Arranged in a way that makes processing, analysis, and visualization simpler.
+
+In a tidy data set:
+
+  - Each variable must have its own column.
+  - Each observation must have its own row.
+  - Each value must have its own cell.
+
+
+---
+class: inverse
+
+# Tidyverse: dplyr
+
+The workhorse package.
+
+It has three main goals:
+
+  - Make the most important data manipulation tasks *easier*.
+  - Do them *faster*.
+  - Use the same interface to work with data frames, data tables or a database.
+
+---
+class: inverse
+
+# Tidyverse: dplyr
+
+Some key operations include:
+
+- <span class="func">select</span>: grab columns
+    - select helpers: <span class="func">one\_of</span>, <span class="func">starts\_with</span>, <span class="func">num_range</span> etc.
+- <span class="func">filter</span>/<span class="func">slice</span>: grab rows
+- <span class="func">group_by</span>: grouped operations
+- <span class="func">mutate</span>/<span class="func">transmute</span>: create new variables
+- <span class="func">summarize</span>: summarize/aggregate
+
+
+---
+class: inverse
+
+# Tidyverse
+
+The pipe:
+
+<div style = "text-align:center">
+<h1><span class="" style = "color: #ECD078FF; font-size: 2em; vertical-align: top;">%>%</span> 
+</div>
+
+What goes before is provided as the first argument to the subsequent function.
+
+```{r}
+mydata %>% summary()
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Example
+
+
+```{r bball, eval=T}
+load('data/bball.RData')
+glimpse(bball[,1:5])
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Selecting columns
+
+---
+class: inverse
+
+# Tidyverse: Filtering rows
+
+---
+class: inverse
+
+# Tidyverse: Generating New Data
+
+---
+class: inverse
+
+# Tidyverse: Renaming Columns
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+
+---
+class: inverse
+
+# Tidyverse: More
+
+
+
+
+
+
+---
+
+class: inverse, center, middle
+
+# Other Stuff
+
+
+
+

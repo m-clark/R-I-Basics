@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R I: Basics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Michael Clark" />
+    <meta name="date" content="2020-09-24" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R I: Basics <br><br>
+## Data Wrangling
+### Michael Clark
+### CSCAR, UM
+### 2020-09-24
+
+---
+
+
+background-image: url(https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
+
+
+
+
+
+
+---
+class: inverse, center, middle
+
+# Data Structures
+
+&lt;i class="fas fa-database fa-5x"   aria-hidden="true"&gt;&lt;/i&gt;&lt;span class="" style = "margin-right: 25px"&gt;&lt;/span&gt;
+&lt;i class="fas fa-code fa-5x" style = 'color:#1f65b7'&gt;&lt;/i&gt;
+
+---
+class: inverse
+
+# Data Structures
+
+- Vectors
+- Matrices
+- Lists
+- Data Frames
+
+---
+class: inverse
+
+# Data Structures: Vectors
+
+- *Character strings *
+
+
+```r
+string = c('a', 'q')
+```
+
+- *Factors*
+
+
+```r
+factor(string)
+```
+
+How are they different?
+
+---
+class: inverse
+
+# Data Structures: Vectors
+
+- Logicals
+
+
+```r
+my_logic = c(TRUE, FALSE, TRUE)
+```
+
+
+- Numeric and integers
+
+
+```r
+x = c(1, 2.5, 3)
+```
+
+---
+class: inverse
+
+# Data Structures: Matrices &amp; Data Frames
+
+- *Matrices*: still must be all the same type!
+
+
+```r
+x = 1:4
+y = 5:8
+z = 9:12
+
+cbind(x, y, z)   # column bind
+```
+
+- *Data Frame*: Mix it up!
+
+
+```r
+my_df = data.frame(x = 1:2, y = c('a', 'b'))
+```
+
+
+---
+class: inverse
+
+# Data Structures: Lists
+
+Data frames are flexible because they are lists
+
+
+```r
+list(1, '1', my_df)
+```
+
+Most R objects you deal with are lists!
+
+- Data frames, model objects, plots, etc.
+
+
+---
+class: inverse
+
+# Data Structure Exercises
+
+- Exercise 1
+
+  - Create an object that is a matrix and/or a data.frame, and inspect its class or structure (use the class or str functions on the object you just created).
+
+- Exercise 2
+
+  - Create a list of 3 elements, the first of which contains character strings, the second numbers, and the third, the data.frame or matrix you just created in Exercise 1.
+
+- Thinking Exercises
+
+  - How is a factor different from a character vector?
+  - How is a data.frame the same as and different from a matrix?
+  - How is a data.frame the same as and different from a list?
+
+
+
+---
+class: inverse, center, middle
+
+# Input/Output
+
+&lt;i class="fas fa-file-import fa-5x" &gt;&lt;/i&gt;
+&lt;span class="" style = "margin-right: 25px"&gt;&lt;/span&gt;
+&lt;i class="fas fa-file-export fa-5x" &gt;&lt;/i&gt;
+
+
+---
+class: inverse
+
+# Input/Output
+
+Primary packages:
+
+- readr
+  - write_csv, read_csv
+- haven
+  - other statistical packages (e.g. Stata)
+- base R
+  - save, save.image, load
+  - readRDS, saveRDS
+
+
+```r
+my_data = readr::read_csv('some_file.csv')
+
+load('my_saved_R_objects.RData')
+```
+
+---
+class: inverse
+
+# Input/Output Exercises
+
+Read this csv (or any in your project folder):
+
+https://raw.githubusercontent.com/m-clark/data-processing-and-visualization/master/data/cars.csv
+
+
+---
+class: inverse, center, middle
+
+# Indexing
+
+![](img/original-dfs.svg)
+
+---
+class: inverse
+
+# Indexing: Slicing
+
+How do I extract:
+- elements
+- columns/rows
+- subsets
+- ...?
+
+
+```r
+letters[4:6]        # lower case letters a-z
+
+myMatrix[1, 2:3]    # matrix[rows, columns]
+
+mydf['row1', 'b']   # data frame by name
+
+mydf[mydf$a &gt;= 2, ] # boolean
+```
+
+
+---
+class: inverse
+
+# Indexing: List extraction
+
+*[* : grab a slice of elements/columns
+
+*[[* : grab specific elements/columns
+
+*$* : grab specific elements/columns
+
+*@*: extract slot for S4 objects
+
+
+
+```r
+my_list_or_df[2:4]
+
+my_list_or_df[['name']]
+
+my_list_or_df$name
+```
+
+
+
+
+---
+class: inverse
+
+# Indexing: Exercises
+
+
+.pull-left[
+
+Here is a matrix, a data.frame and a list.
+
+
+
+```r
+mymatrix = matrix(
+  rnorm(100), 
+  nrows = 10, 
+  ncols = 10
+)
+
+mydf = mtcars
+
+mylist = list(
+  mat = mymatrix, 
+  thisdf = mydf
+)
+```
+
+]
+
+.pull-right[
+- Exercise 1
+    - For the matrix, in separate operations, take a slice of rows, a selection of columns, and a single element.
+- Exercise 2
+    - For the data.frame, grab a column in 3 different ways.
+- Exercise 3
+    - For the list, grab an element by number and by name.
+]
+
+
+
+---
+class: tidyverse
+background-image: url(img/tidyverse.png)
+
+
+&lt;!-- # Tidyverse --&gt;
+
+&lt;!-- &lt;img src="img/tidyverse.png" style="display:block; margin: 0 auto;"&gt; --&gt;
+
+---
+class: inverse
+
+# Tidyverse
+
+What is the *tidyverse*?
+
+
+```r
+library(tidyverse)
+```
+
+```
+⬢ __  _    __   .    ⬡           ⬢  . 
+ / /_(_)__/ /_ ___  _____ _______ ___ 
+/ __/ / _  / // / |/ / -_) __(_-&lt;/ -_)
+\__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
+     ⬢  . /___/      ⬡      .       ⬢ 
+```
+
+```
+── Attaching packages ────────────── tidyverse 1.3.0 ──
+✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+✓ tibble  3.0.3     ✓ dplyr   1.0.2
+✓ tidyr   1.1.2     ✓ stringr 1.4.0
+✓ readr   1.3.1     ✓ forcats 0.5.0
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Packages
+
+- &lt;span class="pack" style = ""&gt;ggplot2&lt;/span&gt;: data visualization
+- &lt;span class="pack" style = ""&gt;tibble&lt;/span&gt;: a re-imagining of data frames
+- &lt;span class="pack" style = ""&gt;tidyr&lt;/span&gt;: data tidying
+- &lt;span class="pack" style = ""&gt;readr&lt;/span&gt;: data import
+- &lt;span class="pack" style = ""&gt;purrr&lt;/span&gt;: functional programming
+- &lt;span class="pack" style = ""&gt;dplyr&lt;/span&gt;: data manipulation
+- &lt;span class="pack" style = ""&gt;stringr&lt;/span&gt;: string processing
+- &lt;span class="pack" style = ""&gt;forcats&lt;/span&gt;: easier factors
+
+
+---
+class: inverse
+
+# Tidyverse
+
+What is *tidy data*?
+
+- Arranged in a way that makes processing, analysis, and visualization simpler.
+
+In a tidy data set:
+
+  - Each variable must have its own column.
+  - Each observation must have its own row.
+  - Each value must have its own cell.
+
+
+---
+class: inverse
+
+# Tidyverse: dplyr
+
+The workhorse package.
+
+It has three main goals:
+
+  - Make the most important data manipulation tasks *easier*.
+  - Do them *faster*.
+  - Use the same interface to work with data frames, data tables or a database.
+
+---
+class: inverse
+
+# Tidyverse: dplyr
+
+Some key operations include:
+
+- &lt;span class="func"&gt;select&lt;/span&gt;: grab columns
+    - select helpers: &lt;span class="func"&gt;one\_of&lt;/span&gt;, &lt;span class="func"&gt;starts\_with&lt;/span&gt;, &lt;span class="func"&gt;num_range&lt;/span&gt; etc.
+- &lt;span class="func"&gt;filter&lt;/span&gt;/&lt;span class="func"&gt;slice&lt;/span&gt;: grab rows
+- &lt;span class="func"&gt;group_by&lt;/span&gt;: grouped operations
+- &lt;span class="func"&gt;mutate&lt;/span&gt;/&lt;span class="func"&gt;transmute&lt;/span&gt;: create new variables
+- &lt;span class="func"&gt;summarize&lt;/span&gt;: summarize/aggregate
+
+
+---
+class: inverse
+
+# Tidyverse
+
+The pipe:
+
+&lt;div style = "text-align:center"&gt;
+&lt;h1&gt;&lt;span class="" style = "color: #ECD078FF; font-size: 2em; vertical-align: top;"&gt;%&gt;%&lt;/span&gt; 
+&lt;/div&gt;
+
+What goes before is provided as the first argument to the subsequent function.
+
+
+```r
+mydata %&gt;% summary()
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Example
+
+
+
+```r
+load('data/bball.RData')
+glimpse(bball[,1:5])
+```
+
+```
+Rows: 734
+Columns: 5
+$ Rk     [3m[38;5;246m&lt;chr&gt;[39m[23m "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "16", "16", "17", "18", "19", "20", "Rk", "21", "22", "23", "23", "23", "24", "25", "26", "27", "28", "28", "28", "…
+$ Player [3m[38;5;246m&lt;chr&gt;[39m[23m "Álex Abrines", "Quincy Acy", "Jaylen Adams", "Steven Adams", "Bam Adebayo", "Deng Adel", "DeVaughn Akoon-Purcell", "LaMarcus Aldridge", "Rawle Alkins", "Grayson Allen", "Jarrett Allen", "Kadeem Allen",…
+$ Pos    [3m[38;5;246m&lt;chr&gt;[39m[23m "SG", "PF", "PG", "C", "C", "SF", "SG", "C", "SG", "SG", "C", "SG", "PF", "SF", "SF", "PF", "PF", "PF", "C", "PF", "PF", "PF", "Pos", "SF", "PG", "SF", "SF", "SF", "PG", "C", "SG", "PF", "SG", "SG", "SG…
+$ Age    [3m[38;5;246m&lt;chr&gt;[39m[23m "25", "28", "22", "25", "21", "21", "25", "33", "21", "23", "20", "26", "28", "25", "25", "30", "30", "30", "20", "24", "21", "34", "Age", "21", "24", "33", "33", "33", "31", "20", "23", "19", "25", "25…
+$ Tm     [3m[38;5;246m&lt;chr&gt;[39m[23m "OKC", "PHO", "ATL", "OKC", "MIA", "CLE", "DEN", "SAS", "CHI", "UTA", "BRK", "NYK", "POR", "ATL", "MEM", "TOT", "PHO", "MIA", "IND", "MIL", "DAL", "HOU", "Tm", "TOR", "CHI", "TOT", "PHO", "WAS", "ORL", …
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Selecting columns
+
+---
+class: inverse
+
+# Tidyverse: Filtering rows
+
+---
+class: inverse
+
+# Tidyverse: Generating New Data
+
+---
+class: inverse
+
+# Tidyverse: Renaming Columns
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+
+---
+class: inverse
+
+# Tidyverse: More
+
+
+
+
+
+
+---
+
+class: inverse, center, middle
+
+# Other Stuff
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

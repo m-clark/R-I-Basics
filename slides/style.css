@@ -1,0 +1,72 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono+Pro:400,700);
+@import url(https://use.fontawesome.com/releases/v5.14.0/css/all.css);
+
+
+body { 
+  font-family: Roboto, 'Droid Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif; 
+  font-size: 32pt;
+  
+}
+
+em {
+  color: #ECD078FF;
+  font-style: normal;
+  font-weight: 700;
+}
+
+
+
+h1, h2, h3 {
+  font-family: 'Yanone Kaffeesatz';
+  font-weight: normal;
+  color: #b20076;
+}
+
+.tidyverse {
+  background-size: cover;
+}
+
+.title-slide {
+  background-image: url(img/tumblr_p1hklaJ0Fj1wxdq3zo1_1280.jpg);
+  background-size: cover;
+}
+
+/*
+ #data-wrangling {
+  color: #ECD078FF;
+}
+*/
+
+.inverse {
+  background-color: #542437FF; /*#1A1A1AFF*/
+  color: #d6d6d6;
+  text-shadow: 0 0 20px #333;
+}
+
+.inverse h1, .inverse h2, .inverse h3 {
+  color: #EBA42BFF; /*#b20076*/
+}
+
+.remark-slide-content {
+    font-size: 32px;
+}
+
+.remark-code, .remark-inline-code { 
+  font-family: 'Source Code Pro', 'Roboto Mono', 'Lucida Console', Monaco, monospace; 
+  
+}
+
+ul li ul li {
+  font-size: 20px;
+}
+
+.pack {
+  color: #1f65b7;
+}
+
+.func {
+  color: #ECD078FF;
+}

@@ -398,7 +398,7 @@ Some key operations include:
 ---
 class: inverse
 
-# Tidyverse
+# Tidyverse: Piping
 
 The pipe:
 
@@ -419,9 +419,13 @@ class: inverse
 # Tidyverse: Example
 
 
-```{r bball, eval=T}
+```{r bball, eval=-4, echo=-(1:4)}
+# load('../../data-processing-and-visualization/data/bball.RData') # for you
+load(url('https://github.com/m-clark/data-processing-and-visualization/raw/master/data/bball.RData')) # moon reader server
+bball = as_tibble(bball)
+
 load('data/bball.RData')
-glimpse(bball[,1:5])
+str(bball[,1:5])
 ```
 
 
@@ -430,15 +434,114 @@ class: inverse
 
 # Tidyverse: Selecting columns
 
+```{r eval=T}
+bball %>% 
+  select(Player, Tm, Pos) %>% 
+  head()
+```
+
+Use the *-* in front of the name to drop.
+
+---
+class: inverse
+
+# Tidyverse: Selecting columns
+
+Select helpers:
+
+- <span class="func">starts_with</span>: starts with a prefix
+- <span class="func">ends_with</span>: ends with a suffix
+- <span class="func">contains</span>: contains a literal string
+- <span class="func">matches</span>: matches a regular expression
+- <span class="func">num_range</span>: a numerical range like x01, x02, x03.
+- <span class="func">one_of</span>: variables in character vector.
+- <span class="func">everything</span>: all variables.
+
+```{r}
+bball %>% 
+  select(starts_with('p'), contains('3'))
+```
+ 
+
+
 ---
 class: inverse
 
 # Tidyverse: Filtering rows
 
+Filtering requires input that can be converted to a logical vector.
+
+```{r eval=T}
+bball = bball %>% 
+  filter(Rk != "Rk")
+```
+
+
+```{r eval=T}
+bball %>% 
+  filter(Age > 35, Pos == "SF" | Pos == "PF") %>% 
+  distinct(Player, Pos, Age) 
+```
+
+---
+class: inverse
+
+```{r eval=T}
+str(bball)
+```
+
 ---
 class: inverse
 
 # Tidyverse: Generating New Data
+
+```{r, eval=1}
+bball = bball %>% 
+  mutate(across(c(-Player, -Pos, -Tm), as.numeric))
+```
+
+
+```{r eval = T}
+bball = bball %>% 
+  mutate(
+    trueShooting = PTS / (2 * (FGA + (.44 * FTA))),
+    effectiveFG  = (FG + (.5 * X3P)) / FGA,
+    shootingDif  = trueShooting - FG.
+  )
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Grouping & Summarizing
+
+Another very common task is to look at group-based statistics, and we can use <span class='func'>group_by</span> and <span class="func">summarize</span> to help us.
+
+```{r eval=TRUE}
+bball %>%   
+  group_by(Pos) %>%                                                 
+  summarize(
+    `Mean FG%` = mean(FG., na.rm = TRUE),
+    `Mean True Shooting` = mean(trueShooting, na.rm = TRUE)
+  )    
+```
+
+```{r}
+bball %>% 
+  mutate(
+    Pos = case_when(
+      Pos == 'PG-SG' ~ 'PG',
+      Pos == 'C-PF'  ~ 'C',
+      Pos == 'SF-SG' ~ 'SF',
+      Pos == 'PF-C'  | Pos == 'PF-SF' ~ 'PF',
+      Pos == 'SG-PF' | Pos == 'SG-SF' ~ 'SG',
+      TRUE ~ Pos
+    )) %>% 
+  nest_by(Pos) %>%     
+  mutate(FgFt_Corr = list(cor(data$FG., data$FT., use = 'complete'))) %>% 
+  unnest(c(Pos, FgFt_Corr))
+```
 
 ---
 class: inverse

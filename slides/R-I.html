@@ -388,7 +388,7 @@ Some key operations include:
 ---
 class: inverse
 
-# Tidyverse
+# Tidyverse: Piping
 
 The pipe:
 
@@ -413,17 +413,16 @@ class: inverse
 
 ```r
 load('data/bball.RData')
-glimpse(bball[,1:5])
+str(bball[,1:5])
 ```
 
 ```
-Rows: 734
-Columns: 5
-$ Rk     [3m[38;5;246m&lt;chr&gt;[39m[23m "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "16", "16", "17", "18", "19", "20", "Rk", "21", "22", "23", "23", "23", "24", "25", "26", "27", "28", "28", "28", "…
-$ Player [3m[38;5;246m&lt;chr&gt;[39m[23m "Álex Abrines", "Quincy Acy", "Jaylen Adams", "Steven Adams", "Bam Adebayo", "Deng Adel", "DeVaughn Akoon-Purcell", "LaMarcus Aldridge", "Rawle Alkins", "Grayson Allen", "Jarrett Allen", "Kadeem Allen",…
-$ Pos    [3m[38;5;246m&lt;chr&gt;[39m[23m "SG", "PF", "PG", "C", "C", "SF", "SG", "C", "SG", "SG", "C", "SG", "PF", "SF", "SF", "PF", "PF", "PF", "C", "PF", "PF", "PF", "Pos", "SF", "PG", "SF", "SF", "SF", "PG", "C", "SG", "PF", "SG", "SG", "SG…
-$ Age    [3m[38;5;246m&lt;chr&gt;[39m[23m "25", "28", "22", "25", "21", "21", "25", "33", "21", "23", "20", "26", "28", "25", "25", "30", "30", "30", "20", "24", "21", "34", "Age", "21", "24", "33", "33", "33", "31", "20", "23", "19", "25", "25…
-$ Tm     [3m[38;5;246m&lt;chr&gt;[39m[23m "OKC", "PHO", "ATL", "OKC", "MIA", "CLE", "DEN", "SAS", "CHI", "UTA", "BRK", "NYK", "POR", "ATL", "MEM", "TOT", "PHO", "MIA", "IND", "MIL", "DAL", "HOU", "Tm", "TOR", "CHI", "TOT", "PHO", "WAS", "ORL", …
+'data.frame':	734 obs. of  5 variables:
+ $ Rk    : chr  "1" "2" "3" "4" ...
+ $ Player: chr  "Álex Abrines" "Quincy Acy" "Jaylen Adams" "Steven Adams" ...
+ $ Pos   : chr  "SG" "PF" "PG" "C" ...
+ $ Age   : chr  "25" "28" "22" "25" ...
+ $ Tm    : chr  "OKC" "PHO" "ATL" "OKC" ...
 ```
 
 
@@ -432,15 +431,191 @@ class: inverse
 
 # Tidyverse: Selecting columns
 
+
+```r
+bball %&gt;% 
+  select(Player, Tm, Pos) %&gt;% 
+  head()
+```
+
+```
+        Player  Tm Pos
+1 Álex Abrines OKC  SG
+2   Quincy Acy PHO  PF
+3 Jaylen Adams ATL  PG
+4 Steven Adams OKC   C
+5  Bam Adebayo MIA   C
+6    Deng Adel CLE  SF
+```
+
+Use the *-* in front of the name to drop.
+
+---
+class: inverse
+
+# Tidyverse: Selecting columns
+
+Select helpers:
+
+- &lt;span class="func"&gt;starts_with&lt;/span&gt;: starts with a prefix
+- &lt;span class="func"&gt;ends_with&lt;/span&gt;: ends with a suffix
+- &lt;span class="func"&gt;contains&lt;/span&gt;: contains a literal string
+- &lt;span class="func"&gt;matches&lt;/span&gt;: matches a regular expression
+- &lt;span class="func"&gt;num_range&lt;/span&gt;: a numerical range like x01, x02, x03.
+- &lt;span class="func"&gt;one_of&lt;/span&gt;: variables in character vector.
+- &lt;span class="func"&gt;everything&lt;/span&gt;: all variables.
+
+
+```r
+bball %&gt;% 
+  select(starts_with('p'), contains('3'))
+```
+ 
+
+
 ---
 class: inverse
 
 # Tidyverse: Filtering rows
 
+Filtering requires input that can be converted to a logical vector.
+
+
+```r
+bball = bball %&gt;% 
+  filter(Rk != "Rk")
+```
+
+
+
+```r
+bball %&gt;% 
+  filter(Age &gt; 35, Pos == "SF" | Pos == "PF") %&gt;% 
+  distinct(Player, Pos, Age) 
+```
+
+```
+         Player Pos Age
+1  Vince Carter  PF  42
+2   Kyle Korver  PF  37
+3 Dirk Nowitzki  PF  40
+```
+
+---
+class: inverse
+
+
+```r
+str(bball)
+```
+
+```
+'data.frame':	708 obs. of  30 variables:
+ $ Rk    : chr  "1" "2" "3" "4" ...
+ $ Player: chr  "Álex Abrines" "Quincy Acy" "Jaylen Adams" "Steven Adams" ...
+ $ Pos   : chr  "SG" "PF" "PG" "C" ...
+ $ Age   : chr  "25" "28" "22" "25" ...
+ $ Tm    : chr  "OKC" "PHO" "ATL" "OKC" ...
+ $ G     : chr  "31" "10" "34" "80" ...
+ $ GS    : chr  "2" "0" "1" "80" ...
+ $ MP    : chr  "588" "123" "428" "2669" ...
+ $ FG    : chr  "56" "4" "38" "481" ...
+ $ FGA   : chr  "157" "18" "110" "809" ...
+ $ FG.   : chr  ".357" ".222" ".345" ".595" ...
+ $ X3P   : chr  "41" "2" "25" "0" ...
+ $ X3PA  : chr  "127" "15" "74" "2" ...
+ $ X3P.  : chr  ".323" ".133" ".338" ".000" ...
+ $ X2P   : chr  "15" "2" "13" "481" ...
+ $ X2PA  : chr  "30" "3" "36" "807" ...
+ $ X2P.  : chr  ".500" ".667" ".361" ".596" ...
+ $ eFG.  : chr  ".487" ".278" ".459" ".595" ...
+ $ FT    : chr  "12" "7" "7" "146" ...
+ $ FTA   : chr  "13" "10" "9" "292" ...
+ $ FT.   : chr  ".923" ".700" ".778" ".500" ...
+ $ ORB   : chr  "5" "3" "11" "391" ...
+ $ DRB   : chr  "43" "22" "49" "369" ...
+ $ TRB   : chr  "48" "25" "60" "760" ...
+ $ AST   : chr  "20" "8" "65" "124" ...
+ $ STL   : chr  "17" "1" "14" "117" ...
+ $ BLK   : chr  "6" "4" "5" "76" ...
+ $ TOV   : chr  "14" "4" "28" "135" ...
+ $ PF    : chr  "53" "24" "45" "204" ...
+ $ PTS   : chr  "165" "17" "108" "1108" ...
+```
+
 ---
 class: inverse
 
 # Tidyverse: Generating New Data
+
+
+```r
+bball = bball %&gt;% 
+  mutate(across(c(-Player, -Pos, -Tm), as.numeric))
+```
+
+
+
+```r
+bball = bball %&gt;% 
+  mutate(
+    trueShooting = PTS / (2 * (FGA + (.44 * FTA))),
+    effectiveFG  = (FG + (.5 * X3P)) / FGA,
+    shootingDif  = trueShooting - FG.
+  )
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Grouping &amp; Summarizing
+
+Another very common task is to look at group-based statistics, and we can use &lt;span class='func'&gt;group_by&lt;/span&gt; and &lt;span class="func"&gt;summarize&lt;/span&gt; to help us.
+
+
+```r
+bball %&gt;%   
+  group_by(Pos) %&gt;%                                                 
+  summarize(
+    `Mean FG%` = mean(FG., na.rm = TRUE),
+    `Mean True Shooting` = mean(trueShooting, na.rm = TRUE)
+  )    
+```
+
+```
+# A tibble: 11 x 3
+   Pos   `Mean FG%` `Mean True Shooting`
+   &lt;chr&gt;      &lt;dbl&gt;                &lt;dbl&gt;
+ 1 C          0.522                0.572
+ 2 C-PF       0.407                0.530
+ 3 PF         0.442                0.536
+ 4 PF-C       0.356                0.492
+ 5 PF-SF      0.419                0.544
+ 6 PG         0.409                0.512
+ 7 SF         0.425                0.528
+ 8 SF-SG      0.431                0.558
+ 9 SG         0.407                0.517
+10 SG-PF      0.416                0.582
+11 SG-SF      0.38                 0.466
+```
+
+
+```r
+bball %&gt;% 
+  mutate(
+    Pos = case_when(
+      Pos == 'PG-SG' ~ 'PG',
+      Pos == 'C-PF'  ~ 'C',
+      Pos == 'SF-SG' ~ 'SF',
+      Pos == 'PF-C'  | Pos == 'PF-SF' ~ 'PF',
+      Pos == 'SG-PF' | Pos == 'SG-SF' ~ 'SG',
+      TRUE ~ Pos
+    )) %&gt;% 
+  nest_by(Pos) %&gt;%     
+  mutate(FgFt_Corr = list(cor(data$FG., data$FT., use = 'complete'))) %&gt;% 
+  unnest(c(Pos, FgFt_Corr))
+```
 
 ---
 class: inverse

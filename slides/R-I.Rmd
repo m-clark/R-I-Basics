@@ -1,9 +1,9 @@
 ---
-title: "R I: Basics <br><br>"
-subtitle: "Data Wrangling"
-author: "Michael Clark"
-institute: "CSCAR, UM"
-date: "2020-09-24"
+title: "<span class='title'>R I: Basics</span>"
+subtitle: "<span class='subtitle'>Data Wrangling</span>"
+author: "<span class='author'>Michael Clark</span>"
+institute: "<span class='institute'>m-clark.github.io <br> @statsdatasci <br> CSCAR, UM</span>"
+date: "<span class='date'>2020-09-24</span>"
 css: style.css
 output:
   xaringan::moon_reader:
@@ -354,7 +354,7 @@ class: inverse
 ---
 class: inverse
 
-# Tidyverse
+# Tidyverse: Tidiness
 
 What is *tidy data*?
 
@@ -548,21 +548,270 @@ class: inverse
 
 # Tidyverse: Renaming Columns
 
+Standard approach.
+
+```{r}
+data %>% 
+  rename(new_name = old_name,
+         new_name2 = old_name2)
+```
+
+More complex.
+
+```{r}
+bball %>%
+  rename_with(
+    str_replace,      # function
+    contains('.'),    # columns
+    pattern = '\\.',  # function arguments
+    replacement = '%'
+  ) %>% 
+  rename_with(str_remove, starts_with('X'), pattern = 'X') %>%
+  colnames()
+```
+
+
 ---
 class: inverse
 
 # Tidyverse: Merging
+
+<span class="func">inner_join</span>: return all rows from x where there are matching values in y, and all columns from x and y. 
+
+<span class="func">left_join</span>: return all rows from x, and all columns from x and y. 
+
+<span class="func">right_join</span>: return all rows from y, and all columns from x and y. 
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+
+<span class="func">semi_join</span>: return all rows from x where there are matching values in y, keeping just columns from x. 
+
+<span class="func">anti_join</span>: return all rows from x where there are not matching values in y, keeping just columns from x.
+
+<span class="func">full_join</span>: return all rows and all columns from both x and y. 
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+```{r, echo=-(1:2), message=TRUE, eval=TRUE}
+band_members = tibble(
+  Name = c('Seth', 'Francis'),
+  Band = c('Com Truise', 'Pixies')
+)
+band_instruments = tibble(
+  Name = c('Francis', 'Bubba', 'Seth'),
+  Instrument = c('Guitar', 'Guitar', 'Synthesizer')
+)
+
+band_members
+band_instruments
+```
+
+
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+
+```{r eval=T}
+left_join(band_members, band_instruments)
+```
+
+```{r eval=T}
+full_join(band_members, band_instruments)
+```
 
 ---
 class: inverse
 
 # Tidyverse: Pivoting
 
+Pivoting involves reshaping the data.
+
+
+<span class="func">pivot_longer</span>: convert data from a wider format to longer one
+
+<span class="func">pivot_wider</span>:  convert data from a longer format to wider one
+
+<!-- ![](img/tidyr-spread-gather.gif){width:30%} -->
+<img src="img/tidyr-spread-gather.gif" style="display:block; margin: 0 auto; width:30%;">
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+```{r}
+library(tidyr)
+
+stocks <- data.frame(
+  time = as.Date('2009-01-01') + 0:9,
+  X = rnorm(10, 0, 1),
+  Y = rnorm(10, 0, 2),
+  Z = rnorm(10, 0, 4)
+)
+
+stocks %>% 
+  pivot_longer(
+    cols      = -time,   # works similar to using select()
+    names_to  = 'stock', # the name of the column that will have column names as labels
+    values_to = 'price'  # the name of the column for the values
+  ) %>% 
+  head()
+```
+
 
 ---
 class: inverse
 
 # Tidyverse: More
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 0
+
+Install and load the <span class="pack">dplyr</span> <span class="pack">ggplot2movies</span> packages. Look at the help file for the `movies` data set, which contains data from IMDB.
+
+
+```{r}
+install.packages('ggplot2movies')
+
+data('movies', package = 'ggplot2movies')
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1a
+
+Use <span class="func">mutate</span> to create a centered version of the rating variable.  A centered variable is one whose mean has been subtracted from it. The process will take the following form:
+
+```{r ex1a_1, eval=FALSE}
+data %>% 
+  mutate(new_var_name = '?')
+```
+
+```{r ex1a_2, echo=FALSE, eval=FALSE}
+movies %>% 
+  mutate(ratingCen = rating - mean(rating)) 
+```
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1b
+
+Use <span class="func">filter</span> to create a new data frame that has only movies from the years 2000 and beyond. Use the greater than or equal operator `>=`.
+
+```{r ex1b, echo=FALSE, eval=FALSE}
+movies %>% 
+  filter(year >= 2000) 
+```
+
+### Exercise 1c
+
+Use <span class="func">select</span> to create a new data frame that only has the `title`, `year`, `budget`, `length`, `rating` and `votes` variables.  There are at least 3 ways to do this.
+
+```{r ex1c, echo=FALSE, eval=FALSE}
+movies %>% 
+  select(title, year, budget, length, rating, votes) 
+movies %>% 
+  select(1:6)
+movies %>% 
+  select(-num_range('r',1:10), -mpaa, -starts_with('A'), -Comedy, -starts_with('D'), -Romance, -Short)
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1d
+
+Rename the `length` column to `length_in_min` (i.e. length in minutes).
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 2
+
+Use <span class="func">group_by</span> to group the data by year, and <span class="func">summarize</span> to create a new variable that is the average budget. The <span class="func">summarize</span> function works just like <span class="func">mutate</span> in this case.
+
+Use the <span class="func">mean</span> function to get the average, but you'll also need to use the argument `na.rm = TRUE` within it because the earliest years have no budget recorded.
+
+
+```{r ex2, echo=FALSE, eval=FALSE}
+movies %>% 
+  group_by(year) %>% 
+  summarise(AvgBudget=mean(budget, na.rm=T)) %>% 
+  tail
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 3
+
+Use <span class="func">pivot_longer</span> to create a 'tidy' data set from the following.
+
+```{r ex3, eval=FALSE, echo=1:3}
+dat = tibble(id = 1:10,
+             x = rnorm(10),
+             y = rnorm(10))
+dat %>% pivot_longer(key = var, value = score, -id)
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+
+### Exercise 4
+
+Now put several actions together in one set of piped operations. 
+
+- Filter movies released *after* 1990
+- select the same variables as before but also the `mpaa`, `Action`, and `Drama` variables
+- group by `mpaa` *and* (your choice) `Action` *or* `Drama`
+- get the average rating
+
+It should spit out something like the following:
+
+```{r ex4, echo=FALSE}
+movies %>%
+  filter(year>=1990) %>% 
+  select(title, year, budget, length, rating, votes, mpaa, Action, Drama) %>% 
+  group_by(mpaa, Drama) %>% 
+  summarise(AvgRating = mean(rating))
+```
 
 
 

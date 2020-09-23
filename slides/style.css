@@ -19,7 +19,7 @@ em {
 
 
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
   color: #b20076;
@@ -69,4 +69,24 @@ ul li ul li {
 
 .func {
   color: #ECD078FF;
+}
+
+
+/* title slide */
+.title {
+  margin-bottom: 100px;
+  font-size: 50pt;
+  display: inline-block;
+}
+.subtitle {
+  font-size: 34pt;
+}
+.author {
+  font-size: 34pt;
+}
+.institute {
+  font-size: 15pt;
+}
+.date {
+  font-size: 15pt;
 }

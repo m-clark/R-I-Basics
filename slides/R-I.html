@@ -13,20 +13,31 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# R I: Basics <br><br>
-## Data Wrangling
-### Michael Clark
-### CSCAR, UM
-### 2020-09-24
+# <span class="title">R I: Basics</span>
+## <span class="subtitle">Data Wrangling</span>
+### <span class="author">Michael Clark</span>
+### <span class="institute">m-clark.github.io <br> <span class="citation">@statsdatasci</span> <br> CSCAR, UM</span>
+### <span class="date">2020-09-24</span>
 
 ---
 
+class: inverse
 
 background-image: url(https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
 
 
 
 
+---
+class: inverse, middle, center
+
+### *Data Structures*
+
+### *Input/Output*
+
+### *Indexing*
+
+### *Tidyverse*
 
 
 ---
@@ -38,14 +49,19 @@ class: inverse, center, middle
 &lt;i class="fas fa-code fa-5x" style = 'color:#1f65b7'&gt;&lt;/i&gt;
 
 ---
-class: inverse
+class: inverse, center
 
 # Data Structures
 
-- Vectors
-- Matrices
-- Lists
-- Data Frames
+&lt;br&gt;
+
+*Vectors*
+
+*Matrices*
+
+*Lists*
+
+*Data Frames*
 
 ---
 class: inverse
@@ -56,7 +72,7 @@ class: inverse
 
 
 ```r
-string = c('a', 'q')
+string = c('a', 'b', 'b', 'q', 'q', 'r')
 ```
 
 - *Factors*
@@ -66,6 +82,11 @@ string = c('a', 'q')
 factor(string)
 ```
 
+```
+[1] a b b q q r
+Levels: a b q r
+```
+
 How are they different?
 
 ---
@@ -73,15 +94,29 @@ class: inverse
 
 # Data Structures: Vectors
 
-- Logicals
+- *Logicals*
 
 
 ```r
 my_logic = c(TRUE, FALSE, TRUE)
+
+as.logical(1:5 &gt; 3)
+```
+
+```
+[1] FALSE FALSE FALSE  TRUE  TRUE
+```
+
+```r
+as.numeric(my_logic)
+```
+
+```
+[1] 1 0 1
 ```
 
 
-- Numeric and integers
+- *Numeric* and *integers*
 
 
 ```r
@@ -91,9 +126,37 @@ x = c(1, 2.5, 3)
 ---
 class: inverse
 
-# Data Structures: Matrices &amp; Data Frames
+# Data Structures: Vectors
 
-- *Matrices*: still must be all the same type!
+Another common data structure: *dates*. 
+
+
+```r
+Sys.Date()
+```
+
+```
+[1] "2020-09-24"
+```
+
+```r
+x = as.Date(c(Sys.Date(), '2020-09-01'))
+
+class(x)
+```
+
+```
+[1] "Date"
+```
+
+The &lt;span class="pack" style = ""&gt;lubridate&lt;/span&gt; package will a lot.
+
+---
+class: inverse
+
+# Data Structures: Matrices
+
+- *Matrices*: like vectors, all *elements* must be the same type!
 
 
 ```r
@@ -104,11 +167,40 @@ z = 9:12
 cbind(x, y, z)   # column bind
 ```
 
+```
+     x y  z
+[1,] 1 5  9
+[2,] 2 6 10
+[3,] 3 7 11
+[4,] 4 8 12
+```
+
+---
+class: inverse
+
+# Data Structures: Data Frames
+
 - *Data Frame*: Mix it up!
 
 
 ```r
 my_df = data.frame(x = 1:2, y = c('a', 'b'))
+my_df
+```
+
+```
+  x y
+1 1 a
+2 2 b
+```
+
+ *tibbles*
+- Special class of data frames
+- Part of the &lt;span class="pack"&gt;tidyverse&lt;/span&gt; we will look at later
+
+
+```r
+as_tibble(mtcars)
 ```
 
 
@@ -117,16 +209,36 @@ class: inverse
 
 # Data Structures: Lists
 
-Data frames are flexible because they are lists
+Data frames are flexible because they are *lists*.
 
 
 ```r
 list(1, '1', my_df)
 ```
 
+```
+[[1]]
+[1] 1
+
+[[2]]
+[1] "1"
+
+[[3]]
+  x y
+1 1 a
+2 2 b
+```
+
+---
+class: inverse
+
+# Data Structures: Lists
+
 Most R objects you deal with are lists!
 
 - Data frames, model objects, plots, etc.
+
+How do you get at its elements?
 
 
 ---
@@ -136,7 +248,7 @@ class: inverse
 
 - Exercise 1
 
-  - Create an object that is a matrix and/or a data.frame, and inspect its class or structure (use the class or str functions on the object you just created).
+  - Create an object that is a &lt;span class="objclass"&gt;matrix&lt;/span&gt; and/or a &lt;span class="objclass"&gt;data.frame&lt;/span&gt;, and inspect its *class* or *structure* (use the &lt;span class="func"&gt;class&lt;/span&gt; or &lt;span class="func"&gt;str&lt;/span&gt; functions on the object you just created).
 
 - Exercise 2
 
@@ -167,13 +279,13 @@ class: inverse
 
 Primary packages:
 
-- readr
-  - write_csv, read_csv
-- haven
+- &lt;span class="pack" style = ""&gt;readr&lt;/span&gt;
+  - &lt;span class="func" style = ""&gt;write_csv&lt;/span&gt;, &lt;span class="func" style = ""&gt;read_csv&lt;/span&gt;
+- &lt;span class="pack" style = ""&gt;haven&lt;/span&gt;
   - other statistical packages (e.g. Stata)
 - base R
-  - save, save.image, load
-  - readRDS, saveRDS
+  - &lt;span class="func" style = ""&gt;save&lt;/span&gt;, &lt;span class="func" style = ""&gt;save.image&lt;/span&gt;, &lt;span class="func" style = ""&gt;load&lt;/span&gt;
+  - &lt;span class="func" style = ""&gt;readRDS&lt;/span&gt;, &lt;span class="func" style = ""&gt;saveRDS&lt;/span&gt;
 
 
 ```r
@@ -187,9 +299,11 @@ class: inverse
 
 # Input/Output Exercises
 
-Read this csv (or any in your project folder):
+Read this csv (or any in your project data folder):
 
 https://raw.githubusercontent.com/m-clark/data-processing-and-visualization/master/data/cars.csv
+
+Use &lt;span class="func" style = ""&gt;load&lt;/span&gt; to load an .RData file from your data folder.
 
 
 ---
@@ -205,9 +319,9 @@ class: inverse
 # Indexing: Slicing
 
 How do I extract:
-- elements
-- columns/rows
-- subsets
+- elements of a vector
+- columns/rows of a matrix
+- subsets of a data frame
 - ...?
 
 
@@ -308,7 +422,6 @@ What is the *tidyverse*?
 ```r
 library(tidyverse)
 ```
-
 ```
 ⬢ __  _    __   .    ⬡           ⬢  . 
  / /_(_)__/ /_ ___  _____ _______ ___ 
@@ -344,7 +457,7 @@ class: inverse
 ---
 class: inverse
 
-# Tidyverse
+# Tidyverse: Tidiness
 
 What is *tidy data*?
 
@@ -355,6 +468,7 @@ In a tidy data set:
   - Each variable must have its own column.
   - Each observation must have its own row.
   - Each value must have its own cell.
+  - In theory...
 
 
 ---
@@ -412,17 +526,18 @@ class: inverse
 
 
 ```r
-load('data/bball.RData')
-str(bball[,1:5])
+## load('data/bball.RData')
+glimpse(bball[,1:5])
 ```
 
 ```
-'data.frame':	734 obs. of  5 variables:
- $ Rk    : chr  "1" "2" "3" "4" ...
- $ Player: chr  "Álex Abrines" "Quincy Acy" "Jaylen Adams" "Steven Adams" ...
- $ Pos   : chr  "SG" "PF" "PG" "C" ...
- $ Age   : chr  "25" "28" "22" "25" ...
- $ Tm    : chr  "OKC" "PHO" "ATL" "OKC" ...
+Rows: 734
+Columns: 5
+$ Rk     &lt;chr&gt; "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "16", "16", "17", "18", "19", "20", "Rk", "21", "22", "23", "23", "23", "24", "25", "26", "27", "28", "28", "28", "…
+$ Player &lt;chr&gt; "Álex Abrines", "Quincy Acy", "Jaylen Adams", "Steven Adams", "Bam Adebayo", "Deng Adel", "DeVaughn Akoon-Purcell", "LaMarcus Aldridge", "Rawle Alkins", "Grayson Allen", "Jarrett Allen", "Kadeem Allen",…
+$ Pos    &lt;chr&gt; "SG", "PF", "PG", "C", "C", "SF", "SG", "C", "SG", "SG", "C", "SG", "PF", "SF", "SF", "PF", "PF", "PF", "C", "PF", "PF", "PF", "Pos", "SF", "PG", "SF", "SF", "SF", "PG", "C", "SG", "PF", "SG", "SG", "SG…
+$ Age    &lt;chr&gt; "25", "28", "22", "25", "21", "21", "25", "33", "21", "23", "20", "26", "28", "25", "25", "30", "30", "30", "20", "24", "21", "34", "Age", "21", "24", "33", "33", "33", "31", "20", "23", "19", "25", "25…
+$ Tm     &lt;chr&gt; "OKC", "PHO", "ATL", "OKC", "MIA", "CLE", "DEN", "SAS", "CHI", "UTA", "BRK", "NYK", "POR", "ATL", "MEM", "TOT", "PHO", "MIA", "IND", "MIL", "DAL", "HOU", "Tm", "TOR", "CHI", "TOT", "PHO", "WAS", "ORL", …
 ```
 
 
@@ -439,13 +554,15 @@ bball %&gt;%
 ```
 
 ```
-        Player  Tm Pos
-1 Álex Abrines OKC  SG
-2   Quincy Acy PHO  PF
-3 Jaylen Adams ATL  PG
-4 Steven Adams OKC   C
-5  Bam Adebayo MIA   C
-6    Deng Adel CLE  SF
+# A tibble: 6 x 3
+  Player       Tm    Pos  
+  &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;
+1 Álex Abrines OKC   SG   
+2 Quincy Acy   PHO   PF   
+3 Jaylen Adams ATL   PG   
+4 Steven Adams OKC   C    
+5 Bam Adebayo  MIA   C    
+6 Deng Adel    CLE   SF   
 ```
 
 Use the *-* in front of the name to drop.
@@ -495,52 +612,57 @@ bball %&gt;%
 ```
 
 ```
-         Player Pos Age
-1  Vince Carter  PF  42
-2   Kyle Korver  PF  37
-3 Dirk Nowitzki  PF  40
+# A tibble: 3 x 3
+  Player        Pos   Age  
+  &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;
+1 Vince Carter  PF    42   
+2 Kyle Korver   PF    37   
+3 Dirk Nowitzki PF    40   
 ```
 
 ---
 class: inverse
 
+Everything's a character string!
+
 
 ```r
-str(bball)
+glimpse(bball, width = 50)
 ```
 
 ```
-'data.frame':	708 obs. of  30 variables:
- $ Rk    : chr  "1" "2" "3" "4" ...
- $ Player: chr  "Álex Abrines" "Quincy Acy" "Jaylen Adams" "Steven Adams" ...
- $ Pos   : chr  "SG" "PF" "PG" "C" ...
- $ Age   : chr  "25" "28" "22" "25" ...
- $ Tm    : chr  "OKC" "PHO" "ATL" "OKC" ...
- $ G     : chr  "31" "10" "34" "80" ...
- $ GS    : chr  "2" "0" "1" "80" ...
- $ MP    : chr  "588" "123" "428" "2669" ...
- $ FG    : chr  "56" "4" "38" "481" ...
- $ FGA   : chr  "157" "18" "110" "809" ...
- $ FG.   : chr  ".357" ".222" ".345" ".595" ...
- $ X3P   : chr  "41" "2" "25" "0" ...
- $ X3PA  : chr  "127" "15" "74" "2" ...
- $ X3P.  : chr  ".323" ".133" ".338" ".000" ...
- $ X2P   : chr  "15" "2" "13" "481" ...
- $ X2PA  : chr  "30" "3" "36" "807" ...
- $ X2P.  : chr  ".500" ".667" ".361" ".596" ...
- $ eFG.  : chr  ".487" ".278" ".459" ".595" ...
- $ FT    : chr  "12" "7" "7" "146" ...
- $ FTA   : chr  "13" "10" "9" "292" ...
- $ FT.   : chr  ".923" ".700" ".778" ".500" ...
- $ ORB   : chr  "5" "3" "11" "391" ...
- $ DRB   : chr  "43" "22" "49" "369" ...
- $ TRB   : chr  "48" "25" "60" "760" ...
- $ AST   : chr  "20" "8" "65" "124" ...
- $ STL   : chr  "17" "1" "14" "117" ...
- $ BLK   : chr  "6" "4" "5" "76" ...
- $ TOV   : chr  "14" "4" "28" "135" ...
- $ PF    : chr  "53" "24" "45" "204" ...
- $ PTS   : chr  "165" "17" "108" "1108" ...
+Rows: 708
+Columns: 30
+$ Rk     &lt;chr&gt; "1", "2", "3", "4", "5", "6", "7…
+$ Player &lt;chr&gt; "Álex Abrines", "Quincy Acy", "J…
+$ Pos    &lt;chr&gt; "SG", "PF", "PG", "C", "C", "SF"…
+$ Age    &lt;chr&gt; "25", "28", "22", "25", "21", "2…
+$ Tm     &lt;chr&gt; "OKC", "PHO", "ATL", "OKC", "MIA…
+$ G      &lt;chr&gt; "31", "10", "34", "80", "82", "1…
+$ GS     &lt;chr&gt; "2", "0", "1", "80", "28", "3", …
+$ MP     &lt;chr&gt; "588", "123", "428", "2669", "19…
+$ FG     &lt;chr&gt; "56", "4", "38", "481", "280", "…
+$ FGA    &lt;chr&gt; "157", "18", "110", "809", "486"…
+$ FG.    &lt;chr&gt; ".357", ".222", ".345", ".595", …
+$ X3P    &lt;chr&gt; "41", "2", "25", "0", "3", "6", …
+$ X3PA   &lt;chr&gt; "127", "15", "74", "2", "15", "2…
+$ X3P.   &lt;chr&gt; ".323", ".133", ".338", ".000", …
+$ X2P    &lt;chr&gt; "15", "2", "13", "481", "277", "…
+$ X2PA   &lt;chr&gt; "30", "3", "36", "807", "471", "…
+$ X2P.   &lt;chr&gt; ".500", ".667", ".361", ".596", …
+$ eFG.   &lt;chr&gt; ".487", ".278", ".459", ".595", …
+$ FT     &lt;chr&gt; "12", "7", "7", "146", "166", "4…
+$ FTA    &lt;chr&gt; "13", "10", "9", "292", "226", "…
+$ FT.    &lt;chr&gt; ".923", ".700", ".778", ".500", …
+$ ORB    &lt;chr&gt; "5", "3", "11", "391", "165", "3…
+$ DRB    &lt;chr&gt; "43", "22", "49", "369", "432", …
+$ TRB    &lt;chr&gt; "48", "25", "60", "760", "597", …
+$ AST    &lt;chr&gt; "20", "8", "65", "124", "184", "…
+$ STL    &lt;chr&gt; "17", "1", "14", "117", "71", "1…
+$ BLK    &lt;chr&gt; "6", "4", "5", "76", "65", "4", …
+$ TOV    &lt;chr&gt; "14", "4", "28", "135", "121", "…
+$ PF     &lt;chr&gt; "53", "24", "45", "204", "203", …
+$ PTS    &lt;chr&gt; "165", "17", "108", "1108", "729…
 ```
 
 ---
@@ -563,6 +685,26 @@ bball = bball %&gt;%
     effectiveFG  = (FG + (.5 * X3P)) / FGA,
     shootingDif  = trueShooting - FG.
   )
+
+bball %&gt;% 
+  select(Player, trueShooting:shootingDif)
+```
+
+```
+# A tibble: 708 x 4
+   Player                 trueShooting effectiveFG shootingDif
+   &lt;chr&gt;                         &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1 Álex Abrines                  0.507       0.487     0.150  
+ 2 Quincy Acy                    0.379       0.278     0.157  
+ 3 Jaylen Adams                  0.474       0.459     0.129  
+ 4 Steven Adams                  0.591       0.595    -0.00405
+ 5 Bam Adebayo                   0.623       0.579     0.0466 
+ 6 Deng Adel                     0.424       0.389     0.118  
+ 7 DeVaughn Akoon-Purcell        0.322       0.3       0.0217 
+ 8 LaMarcus Aldridge             0.576       0.522     0.0566 
+ 9 Rawle Alkins                  0.418       0.372     0.0848 
+10 Grayson Allen                 0.516       0.466     0.140  
+# … with 698 more rows
 ```
 
 
@@ -571,12 +713,21 @@ class: inverse
 
 # Tidyverse: Grouping &amp; Summarizing
 
-Another very common task is to look at group-based statistics, and we can use &lt;span class='func'&gt;group_by&lt;/span&gt; and &lt;span class="func"&gt;summarize&lt;/span&gt; to help us.
+Another very common task is to look at group-based statistics
+
+Primary functions:
+- &lt;span class='func'&gt;group_by&lt;/span&gt; 
+- &lt;span class="func"&gt;summarize&lt;/span&gt;
+
+---
+class: inverse
+
+# Tidyverse: Grouping &amp; Summarizing
 
 
 ```r
 bball %&gt;%   
-  group_by(Pos) %&gt;%                                                 
+* group_by(Pos) %&gt;%
   summarize(
     `Mean FG%` = mean(FG., na.rm = TRUE),
     `Mean True Shooting` = mean(trueShooting, na.rm = TRUE)
@@ -593,7 +744,7 @@ bball %&gt;%
  4 PF-C       0.356                0.492
  5 PF-SF      0.419                0.544
  6 PG         0.409                0.512
- 7 SF         0.425                0.528
+ 7 SF         0.425                0.529
  8 SF-SG      0.431                0.558
  9 SG         0.407                0.517
 10 SG-PF      0.416                0.582
@@ -622,10 +773,135 @@ class: inverse
 
 # Tidyverse: Renaming Columns
 
+Standard approach.
+
+
+```r
+data %&gt;% 
+  rename(new_name = old_name,
+         new_name2 = old_name2)
+```
+
+More complex.
+
+
+```r
+bball %&gt;%
+  rename_with(
+    str_replace,      # function
+    contains('.'),    # columns
+    pattern = '\\.',  # function arguments
+    replacement = '%'
+  ) %&gt;% 
+  rename_with(str_remove, starts_with('X'), pattern = 'X') %&gt;%
+  colnames()
+```
+
+
 ---
 class: inverse
 
 # Tidyverse: Merging
+
+&lt;span class="func"&gt;inner_join&lt;/span&gt;: return all rows from x where there are matching values in y, and all columns from x and y. 
+
+&lt;span class="func"&gt;left_join&lt;/span&gt;: return all rows from x, and all columns from x and y. 
+
+&lt;span class="func"&gt;right_join&lt;/span&gt;: return all rows from y, and all columns from x and y. 
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+
+&lt;span class="func"&gt;semi_join&lt;/span&gt;: return all rows from x where there are matching values in y, keeping just columns from x. 
+
+&lt;span class="func"&gt;anti_join&lt;/span&gt;: return all rows from x where there are not matching values in y, keeping just columns from x.
+
+&lt;span class="func"&gt;full_join&lt;/span&gt;: return all rows and all columns from both x and y. 
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+
+```r
+band_members
+```
+
+```
+# A tibble: 2 x 2
+  Name    Band      
+  &lt;chr&gt;   &lt;chr&gt;     
+1 Seth    Com Truise
+2 Francis Pixies    
+```
+
+```r
+band_instruments
+```
+
+```
+# A tibble: 3 x 2
+  Name    Instrument 
+  &lt;chr&gt;   &lt;chr&gt;      
+1 Francis Guitar     
+2 Bubba   Guitar     
+3 Seth    Synthesizer
+```
+
+
+
+---
+class: inverse
+
+# Tidyverse: Merging
+
+
+
+```r
+left_join(band_members, band_instruments)
+```
+
+```
+# A tibble: 2 x 3
+  Name    Band       Instrument 
+  &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;      
+1 Seth    Com Truise Synthesizer
+2 Francis Pixies     Guitar     
+```
+
+
+```r
+full_join(band_members, band_instruments)
+```
+
+```
+# A tibble: 3 x 3
+  Name    Band       Instrument 
+  &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;      
+1 Seth    Com Truise Synthesizer
+2 Francis Pixies     Guitar     
+3 Bubba   &lt;NA&gt;       Guitar     
+```
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+Pivoting involves reshaping the data.
+
+
+&lt;span class="func"&gt;pivot_longer&lt;/span&gt;: convert data from a wider format to longer one
+
+&lt;span class="func"&gt;pivot_wider&lt;/span&gt;:  convert data from a longer format to wider one
+
+&lt;!-- ![](img/tidyr-spread-gather.gif){width:30%} --&gt;
+&lt;img src="img/tidyr-spread-gather.gif" style="display:block; margin: 0 auto; width:30%;"&gt;
+
 
 ---
 class: inverse
@@ -633,11 +909,178 @@ class: inverse
 # Tidyverse: Pivoting
 
 
+```r
+library(tidyr)
+
+stocks &lt;- data.frame(
+  time = as.Date('2009-01-01') + 0:9,
+  X = rnorm(10, 0, 1),
+  Y = rnorm(10, 0, 2),
+  Z = rnorm(10, 0, 4)
+)
+
+head(stocks)
+```
+
+```
+        time          X          Y           Z
+1 2009-01-01 -0.7246636  2.5349181  0.08410314
+2 2009-01-02  2.2697096 -2.5551774  6.50216262
+3 2009-01-03 -0.5902451  0.5116397 -5.71554250
+4 2009-01-04  0.6101806  0.6137032  3.92730701
+5 2009-01-05  0.8389396 -0.3489363  4.74319883
+6 2009-01-06 -0.6607004  0.1118766  4.06053622
+```
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+
+```r
+stocks %&gt;% 
+  pivot_longer(
+    cols      = -time,   # works similar to using select()
+    names_to  = 'stock', # the name of the column that will have column names as labels
+    values_to = 'price'  # the name of the column for the values
+  ) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 x 3
+  time       stock   price
+  &lt;date&gt;     &lt;chr&gt;   &lt;dbl&gt;
+1 2009-01-01 X     -0.725 
+2 2009-01-01 Y      2.53  
+3 2009-01-01 Z      0.0841
+4 2009-01-02 X      2.27  
+5 2009-01-02 Y     -2.56  
+6 2009-01-02 Z      6.50  
+```
+
+
 ---
 class: inverse
 
 # Tidyverse: More
 
+Other packages are in the *Hadleyverse* or *RStudioverse* that stick to tidy principles.
+
+Beyond that, many modeling and visualization packages are now tidy aware.
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 0
+
+Install and load the &lt;span class="pack"&gt;dplyr&lt;/span&gt; &lt;span class="pack"&gt;ggplot2movies&lt;/span&gt; packages. Look at the help file for the `movies` data set, which contains data from IMDB.
+
+
+
+```r
+install.packages('ggplot2movies')
+
+data('movies', package = 'ggplot2movies')
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1a
+
+Use &lt;span class="func"&gt;mutate&lt;/span&gt; to create a centered version of the rating variable.  A centered variable is one whose mean has been subtracted from it. The process will take the following form:
+
+
+```r
+data %&gt;% 
+  mutate(new_var_name = '?')
+```
+
+
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1b
+
+Use &lt;span class="func"&gt;filter&lt;/span&gt; to create a new data frame that has only movies from the years 2000 and beyond. Use the greater than or equal operator `&gt;=`.
+
+
+
+### Exercise 1c
+
+Use &lt;span class="func"&gt;select&lt;/span&gt; to create a new data frame that only has the `title`, `year`, `budget`, `length`, `rating` and `votes` variables.  There are at least 3 ways to do this.
+
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 1d
+
+Rename the `length` column to `length_in_min` (i.e. length in minutes).
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 2
+
+Use &lt;span class="func"&gt;group_by&lt;/span&gt; to group the data by year, and &lt;span class="func"&gt;summarize&lt;/span&gt; to create a new variable that is the average budget. The &lt;span class="func"&gt;summarize&lt;/span&gt; function works just like &lt;span class="func"&gt;mutate&lt;/span&gt; in this case.
+
+Use the &lt;span class="func"&gt;mean&lt;/span&gt; function to get the average, but you'll also need to use the argument `na.rm = TRUE` within it because the earliest years have no budget recorded.
+
+
+
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+### Exercise 3
+
+Use &lt;span class="func"&gt;pivot_longer&lt;/span&gt; to create a 'tidy' data set from the following.
+
+
+```r
+dat = tibble(id = 1:10,
+             x = rnorm(10),
+             y = rnorm(10))
+```
+
+---
+class: inverse
+
+# Tidyverse: Exercises
+
+
+### Exercise 4
+
+Now put several actions together in one set of piped operations. 
+
+- Filter movies released *after* 1990
+- select the same variables as before but also the `mpaa`, `Action`, and `Drama` variables
+- group by `mpaa` *and* (your choice) `Action` *or* `Drama`
+- get the average rating
+
+It should spit out something like the following:
+
+
+
 
 
 
@@ -645,14 +1088,46 @@ class: inverse
 
 ---
 
-class: inverse, center, middle
+class: inverse, other-stuff
 
 # Other Stuff
+
+.pull-left[
+
+
+*base R*
+- still okay!
+
+*data.table*
+- faster, specialized data frame syntax, good for larger data
+
+*tidyfast*: 
+  - use data.table in a dplyr way
+
+*disk.frame*
+- for processing data too large for memory
+
+]
+
+
+.pull-right[
+
+&lt;br&gt;
+&lt;img src="img/data-processing-timings.png" width="125%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+class: last-slide, inverse, center, middle
+
+
+
+![](https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
+"highlightStyle": "zenburn",
 "highlightLines": true,
 "countIncrementalSlides": false
 });

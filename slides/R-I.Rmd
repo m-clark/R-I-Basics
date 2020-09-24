@@ -9,15 +9,16 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     nature:
-      highlightStyle: github
+      highlightStyle: zenburn
       highlightLines: true
       countIncrementalSlides: false
 ---
+class: inverse
 
 background-image: url(https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
 
 ```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
+options(htmltools.dir.version = FALSE, crayon.enabled = FALSE) # see https://github.com/hadley/mastering-shiny/issues/132
 
 knitr::opts_chunk$set(
   # code
@@ -56,6 +57,16 @@ perc = function(x, digits = 1) paste(rnd(x*100, digits = digits), '%')
 ```
 
 
+---
+class: inverse, middle, center
+
+### *Data Structures*
+
+### *Input/Output*
+
+### *Indexing*
+
+### *Tidyverse*
 
 
 ---
@@ -67,14 +78,19 @@ class: inverse, center, middle
 <i class="fas fa-code fa-5x" style = 'color:#1f65b7'></i>
 
 ---
-class: inverse
+class: inverse, center
 
 # Data Structures
 
-- Vectors
-- Matrices
-- Lists
-- Data Frames
+<br>
+
+*Vectors*
+
+*Matrices*
+
+*Lists*
+
+*Data Frames*
 
 ---
 class: inverse
@@ -83,13 +99,13 @@ class: inverse
 
 - *Character strings *
 
-```{r}
-string = c('a', 'q')
+```{r eval=TRUE}
+string = c('a', 'b', 'b', 'q', 'q', 'r')
 ```
 
 - *Factors*
 
-```{r}
+```{r eval=TRUE}
 factor(string)
 ```
 
@@ -100,14 +116,17 @@ class: inverse
 
 # Data Structures: Vectors
 
-- Logicals
+- *Logicals*
 
-```{r}
+```{r eval = TRUE}
 my_logic = c(TRUE, FALSE, TRUE)
+
+as.logical(1:5 > 3)
+as.numeric(my_logic)
 ```
 
 
-- Numeric and integers
+- *Numeric* and *integers*
 
 ```{r}
 x = c(1, 2.5, 3)
@@ -116,11 +135,28 @@ x = c(1, 2.5, 3)
 ---
 class: inverse
 
-# Data Structures: Matrices & Data Frames
+# Data Structures: Vectors
 
-- *Matrices*: still must be all the same type!
+Another common data structure: *dates*. 
 
-```{r}
+```{r eval=TRUE}
+Sys.Date()
+
+x = as.Date(c(Sys.Date(), '2020-09-01'))
+
+class(x)
+```
+
+The <span class="pack" style = "">lubridate</span> package will a lot.
+
+---
+class: inverse
+
+# Data Structures: Matrices
+
+- *Matrices*: like vectors, all *elements* must be the same type!
+
+```{r eval=TRUE}
 x = 1:4
 y = 5:8
 z = 9:12
@@ -128,10 +164,24 @@ z = 9:12
 cbind(x, y, z)   # column bind
 ```
 
+---
+class: inverse
+
+# Data Structures: Data Frames
+
 - *Data Frame*: Mix it up!
 
-```{r}
+```{r eval=TRUE}
 my_df = data.frame(x = 1:2, y = c('a', 'b'))
+my_df
+```
+
+ *tibbles*
+- Special class of data frames
+- Part of the <span class="pack">tidyverse</span> we will look at later
+
+```{r}
+as_tibble(mtcars)
 ```
 
 
@@ -140,15 +190,22 @@ class: inverse
 
 # Data Structures: Lists
 
-Data frames are flexible because they are lists
+Data frames are flexible because they are *lists*.
 
-```{r}
+```{r eval=TRUE}
 list(1, '1', my_df)
 ```
+
+---
+class: inverse
+
+# Data Structures: Lists
 
 Most R objects you deal with are lists!
 
 - Data frames, model objects, plots, etc.
+
+How do you get at its elements?
 
 
 ---
@@ -158,7 +215,7 @@ class: inverse
 
 - Exercise 1
 
-  - Create an object that is a matrix and/or a data.frame, and inspect its class or structure (use the class or str functions on the object you just created).
+  - Create an object that is a <span class="objclass">matrix</span> and/or a <span class="objclass">data.frame</span>, and inspect its *class* or *structure* (use the <span class="func">class</span> or <span class="func">str</span> functions on the object you just created).
 
 - Exercise 2
 
@@ -189,13 +246,13 @@ class: inverse
 
 Primary packages:
 
-- readr
-  - write_csv, read_csv
-- haven
+- <span class="pack" style = "">readr</span>
+  - <span class="func" style = "">write_csv</span>, <span class="func" style = "">read_csv</span>
+- <span class="pack" style = "">haven</span>
   - other statistical packages (e.g. Stata)
 - base R
-  - save, save.image, load
-  - readRDS, saveRDS
+  - <span class="func" style = "">save</span>, <span class="func" style = "">save.image</span>, <span class="func" style = "">load</span>
+  - <span class="func" style = "">readRDS</span>, <span class="func" style = "">saveRDS</span>
 
 ```{r}
 my_data = readr::read_csv('some_file.csv')
@@ -208,9 +265,11 @@ class: inverse
 
 # Input/Output Exercises
 
-Read this csv (or any in your project folder):
+Read this csv (or any in your project data folder):
 
 https://raw.githubusercontent.com/m-clark/data-processing-and-visualization/master/data/cars.csv
+
+Use <span class="func" style = "">load</span> to load an .RData file from your data folder.
 
 
 ---
@@ -226,9 +285,9 @@ class: inverse
 # Indexing: Slicing
 
 How do I extract:
-- elements
-- columns/rows
-- subsets
+- elements of a vector
+- columns/rows of a matrix
+- subsets of a data frame
 - ...?
 
 ```{r}
@@ -322,9 +381,16 @@ class: inverse
 
 What is the *tidyverse*?
 
-```{r eval=TRUE, message=TRUE, warning=TRUE, echo=-2}
+```{r eval=F, message=TRUE, warning=TRUE, echo=-2}
 library(tidyverse)
 tidyverse::tidyverse_logo()
+```
+```
+⬢ __  _    __   .    ⬡           ⬢  . 
+ / /_(_)__/ /_ ___  _____ _______ ___ 
+/ __/ / _  / // / |/ / -_) __(_-</ -_)
+\__/_/\_,_/\_, /|___/\__/_/ /___/\__/ 
+     ⬢  . /___/      ⬡      .       ⬢ 
 ```
 
 ```
@@ -365,6 +431,7 @@ In a tidy data set:
   - Each variable must have its own column.
   - Each observation must have its own row.
   - Each value must have its own cell.
+  - In theory...
 
 
 ---
@@ -419,13 +486,13 @@ class: inverse
 # Tidyverse: Example
 
 
-```{r bball, eval=-4, echo=-(1:4)}
-# load('../../data-processing-and-visualization/data/bball.RData') # for you
+```{r bball, eval=-5, echo=-(1:4)}
+# load('../../data-processing-and-visualization/data/bball.RData') # for you/knitting
 load(url('https://github.com/m-clark/data-processing-and-visualization/raw/master/data/bball.RData')) # moon reader server
 bball = as_tibble(bball)
 
 load('data/bball.RData')
-str(bball[,1:5])
+glimpse(bball[,1:5])
 ```
 
 
@@ -486,8 +553,10 @@ bball %>%
 ---
 class: inverse
 
+Everything's a character string!
+
 ```{r eval=T}
-str(bball)
+glimpse(bball, width = 50)
 ```
 
 ---
@@ -508,6 +577,9 @@ bball = bball %>%
     effectiveFG  = (FG + (.5 * X3P)) / FGA,
     shootingDif  = trueShooting - FG.
   )
+
+bball %>% 
+  select(Player, trueShooting:shootingDif)
 ```
 
 
@@ -516,11 +588,20 @@ class: inverse
 
 # Tidyverse: Grouping & Summarizing
 
-Another very common task is to look at group-based statistics, and we can use <span class='func'>group_by</span> and <span class="func">summarize</span> to help us.
+Another very common task is to look at group-based statistics
+
+Primary functions:
+- <span class='func'>group_by</span> 
+- <span class="func">summarize</span>
+
+---
+class: inverse
+
+# Tidyverse: Grouping & Summarizing
 
 ```{r eval=TRUE}
 bball %>%   
-  group_by(Pos) %>%                                                 
+  group_by(Pos) %>%                                                 #<<
   summarize(
     `Mean FG%` = mean(FG., na.rm = TRUE),
     `Mean True Shooting` = mean(trueShooting, na.rm = TRUE)
@@ -644,17 +725,13 @@ Pivoting involves reshaping the data.
 <!-- ![](img/tidyr-spread-gather.gif){width:30%} -->
 <img src="img/tidyr-spread-gather.gif" style="display:block; margin: 0 auto; width:30%;">
 
----
-class: inverse
-
-# Tidyverse: Pivoting
 
 ---
 class: inverse
 
 # Tidyverse: Pivoting
 
-```{r}
+```{r eval=TRUE}
 library(tidyr)
 
 stocks <- data.frame(
@@ -664,6 +741,15 @@ stocks <- data.frame(
   Z = rnorm(10, 0, 4)
 )
 
+head(stocks)
+```
+
+---
+class: inverse
+
+# Tidyverse: Pivoting
+
+```{r eval=TRUE}
 stocks %>% 
   pivot_longer(
     cols      = -time,   # works similar to using select()
@@ -679,6 +765,9 @@ class: inverse
 
 # Tidyverse: More
 
+Other packages are in the *Hadleyverse* or *RStudioverse* that stick to tidy principles.
+
+Beyond that, many modeling and visualization packages are now tidy aware.
 
 ---
 class: inverse
@@ -820,10 +909,42 @@ movies %>%
 
 ---
 
-class: inverse, center, middle
+class: inverse, other-stuff
 
 # Other Stuff
 
+.pull-left[
 
+
+*base R*
+- still okay!
+
+*data.table*
+- faster, specialized data frame syntax, good for larger data
+
+*tidyfast*: 
+  - use data.table in a dplyr way
+
+*disk.frame*
+- for processing data too large for memory
+
+]
+
+
+.pull-right[
+
+<br>
+```{r echo=FALSE, eval=TRUE, out.width='125%'}
+knitr::include_graphics('img/data-processing-timings.png')
+```
+]
+
+
+---
+class: last-slide, inverse, center, middle
+
+
+
+![](https://github.com/m-clark/m-clark.github.io/raw/master/img/Rlogo.svg)
 
 

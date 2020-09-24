@@ -1,7 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Audiowide|Alex+Brush|Roboto+Condensed|Open+Sans|Lato|Lora|Fira+Sans|Yellowtail|Condiment|Mrs+Sheppards|Mr+Dafoe");
 @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
 @import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
-@import url(https://fonts.googleapis.com/css?family=Roboto+Mono+Pro:400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono:400,700);
 @import url(https://use.fontawesome.com/releases/v5.14.0/css/all.css);
 
 
@@ -30,9 +30,21 @@ h1, h2, h3, h4, h5 {
 }
 
 .title-slide {
-  background-image: url(img/tumblr_p1hklaJ0Fj1wxdq3zo1_1280.jpg);
+  background-image: url(img/sunset-vector.jpg);
   background-size: cover;
+  vertical-align: middle;
 }
+
+.title-slide h1, h2, h3 {
+  font-family: Audiowide;
+  text-shadow: 0 0 10px #EBA42BFF;
+}
+
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+
 
 /*
  #data-wrangling {
@@ -50,13 +62,32 @@ h1, h2, h3, h4, h5 {
   color: #EBA42BFF; /*#b20076*/
 }
 
+.inverse h1 {
+  text-shadow: 0 0 5px #EBA42BFF; /*#b20076*/
+}
+
 .remark-slide-content {
     font-size: 32px;
+}
+
+/* background of slide */
+.remark-slide-container {
+    display: block;
+    background-color: #422B3AFF;
+}
+
+.remark-slide-scaler {
+    box-shadow: 0 0 30px #EBA42BFF;
 }
 
 .remark-code, .remark-inline-code { 
   font-family: 'Source Code Pro', 'Roboto Mono', 'Lucida Console', Monaco, monospace; 
   
+}
+
+.remark-code-line-highlighted {
+    background-color: #EBEBEBFF;
+    color: #3f3f3f;
 }
 
 ul li ul li {
@@ -74,19 +105,40 @@ ul li ul li {
 
 /* title slide */
 .title {
-  margin-bottom: 100px;
-  font-size: 50pt;
+  margin-bottom: 0;
+  font-size: 50pt;  
+  position: relative;
+  bottom: 50px;
   display: inline-block;
 }
 .subtitle {
-  font-size: 34pt;
+  font-size: 28pt;
+  position: relative;
+  bottom: 75px;
+  display: inline-block;
 }
 .author {
-  font-size: 34pt;
+  font-size: 28pt;
+  font-family: 'Mrs Sheppards', Yellowtail, 'Mr Dafoe', Condiment, Roboto, Sans ;
+  position: relative;
+  bottom: -25px;
+  margin-bottom: 50px;
+  display: inline-block;
 }
 .institute {
-  font-size: 15pt;
+  font-size: 12pt;
 }
 .date {
-  font-size: 15pt;
+  font-size: 12pt;
+}
+
+/* other special slides*/
+
+.other-stuff {
+  font-size: 16pt;
+}
+
+.last-slide {
+  background-image: url(img/zoom.gif);
+  background-size: cover;
 }

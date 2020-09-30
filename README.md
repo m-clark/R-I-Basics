@@ -1,6 +1,6 @@
 R-I-Basics
 
-This is the repo for the workshop that focuses on Part I of (the soon-to-be-renamed) [Data Processing and Visualization](https://m-clark.github.io/data-processing-and-visualization)
+This is the repo for the workshop that focuses on Part I of [Practical Data Science](https://m-clark.github.io/data-processing-and-visualization). You can see the workshop slides [here](https://m-clark.github.io/R-I-Basics/index.html).
 
 
 Run the following in your R session to get the notes and materials for the workshop.  Change the `destdir` to save the project in a specific place (not necessary, should default to desktop).  It will open the RStudio project for you.

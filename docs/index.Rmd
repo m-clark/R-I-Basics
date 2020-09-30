@@ -54,6 +54,7 @@ kable_df = function(data, digits=3, ...) {
 }
 
 perc = function(x, digits = 1) paste(rnd(x*100, digits = digits), '%')
+library(tidyverse)
 ```
 
 
